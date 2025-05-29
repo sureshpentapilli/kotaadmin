@@ -1,15 +1,18 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
-import NgoDetail from "./pages/NgoDetail";
+import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/ngo/:id" element={<NgoDetail />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          {/* Add more routes as needed */}
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }
