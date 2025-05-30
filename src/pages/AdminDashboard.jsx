@@ -1,8 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Badge, Button, Spinner, Table, OverlayTrigger, Tooltip, Collapse } from 'react-bootstrap';
-import { FaCheck, FaTimes, FaFileAlt, FaIdCard, FaUser, FaBuilding, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import './AdminDashboard.css';
+import {
+  Card,
+  Badge,
+  Button,
+  Spinner,
+  Table,
+  OverlayTrigger,
+  Tooltip,
+  Collapse,
+} from "react-bootstrap";
+import {
+  FaCheck,
+  FaTimes,
+  FaFileAlt,
+  FaIdCard,
+  FaUser,
+  FaBuilding,
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [ngos, setNgos] = useState([]);
@@ -29,17 +47,18 @@ const AdminDashboard = () => {
       const button = document.getElementById(`status-btn-${id}`);
       if (button) {
         button.disabled = true;
-        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+        button.innerHTML =
+          '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
       }
-      
+
       await axios.put(
         `https://kotabackend-1.onrender.com/api/ngo/status/${id}`,
         { status }
       );
-      
+
       const row = document.getElementById(`ngo-row-${id}`);
       if (row) {
-        row.classList.add('row-updated');
+        row.classList.add("row-updated");
         setTimeout(() => {
           fetchNgos();
         }, 500);
@@ -51,21 +70,22 @@ const AdminDashboard = () => {
       const button = document.getElementById(`status-btn-${id}`);
       if (button) {
         button.disabled = false;
-        button.innerHTML = status === 'Accepted' ? 'Approve' : 'Reject';
+        button.innerHTML = status === "Accepted" ? "Approve" : "Reject";
       }
     }
   };
 
   const toggleRowExpansion = (id) => {
-    setExpandedRows(prev => ({
+    setExpandedRows((prev) => ({
       ...prev,
-      [id]: !prev[id]
+      [id]: !prev[id],
     }));
   };
 
-  const filteredNgos = filterStatus === "all" 
-    ? ngos 
-    : ngos.filter(ngo => ngo.status === filterStatus);
+  const filteredNgos =
+    filterStatus === "all"
+      ? ngos
+      : ngos.filter((ngo) => ngo.status === filterStatus);
 
   useEffect(() => {
     fetchNgos();
@@ -79,7 +99,11 @@ const AdminDashboard = () => {
         return <Badge bg="danger">Rejected</Badge>;
       case "Pending":
       default:
-        return <Badge bg="warning" text="dark">Pending</Badge>;
+        return (
+          <Badge bg="warning" text="dark">
+            Pending
+          </Badge>
+        );
     }
   };
 
@@ -88,29 +112,31 @@ const AdminDashboard = () => {
       <div className="dashboard-header">
         <h2>NGO Management Dashboard</h2>
         <div className="status-filter">
-          <Button 
-            variant={filterStatus === "all" ? "primary" : "outline-primary"} 
+          <Button
+            variant={filterStatus === "all" ? "primary" : "outline-primary"}
             onClick={() => setFilterStatus("all")}
             className="filter-btn"
           >
             All
           </Button>
-          <Button 
-            variant={filterStatus === "Pending" ? "warning" : "outline-warning"} 
+          <Button
+            variant={filterStatus === "Pending" ? "warning" : "outline-warning"}
             onClick={() => setFilterStatus("Pending")}
             className="filter-btn"
           >
             Pending
           </Button>
-          <Button 
-            variant={filterStatus === "Accepted" ? "success" : "outline-success"} 
+          <Button
+            variant={
+              filterStatus === "Accepted" ? "success" : "outline-success"
+            }
             onClick={() => setFilterStatus("Accepted")}
             className="filter-btn"
           >
             Approved
           </Button>
-          <Button 
-            variant={filterStatus === "Rejected" ? "danger" : "outline-danger"} 
+          <Button
+            variant={filterStatus === "Rejected" ? "danger" : "outline-danger"}
             onClick={() => setFilterStatus("Rejected")}
             className="filter-btn"
           >
@@ -118,7 +144,7 @@ const AdminDashboard = () => {
           </Button>
         </div>
       </div>
-      
+
       <Card className="dashboard-card">
         <Card.Body>
           {loading ? (
@@ -133,7 +159,7 @@ const AdminDashboard = () => {
               <Table className="ngo-table" hover>
                 <thead>
                   <tr>
-                    <th style={{ width: '40px' }}></th>
+                    <th style={{ width: "40px" }}></th>
                     <th>Organization</th>
                     <th>Full Name</th>
                     <th>Contact</th>
@@ -160,7 +186,11 @@ const AdminDashboard = () => {
                               onClick={() => toggleRowExpansion(ngo._id)}
                               className="expand-button p-0"
                             >
-                              {expandedRows[ngo._id] ? <FaChevronUp /> : <FaChevronDown />}
+                              {expandedRows[ngo._id] ? (
+                                <FaChevronUp />
+                              ) : (
+                                <FaChevronDown />
+                              )}
                             </Button>
                           </td>
                           <td>
@@ -169,18 +199,24 @@ const AdminDashboard = () => {
                                 <FaBuilding />
                               </div>
                               <div className="ms-2">
-                                <div className="ngo-name">{ngo.organizationName}</div>
+                                <div className="ngo-name">
+                                  {ngo.organizationName}
+                                </div>
                               </div>
                             </div>
                           </td>
                           <td>{ngo.fullName}</td>
                           <td>
                             <div>{ngo.email}</div>
-                            <div className="text-secondary">{ngo.contactNumber}</div>
+                            <div className="text-secondary">
+                              {ngo.contactNumber}
+                            </div>
                           </td>
                           <td>
                             <div>{ngo.state || "N/A"}</div>
-                            <div className="text-secondary">{ngo.parlimentConstituency || "N/A"}</div>
+                            <div className="text-secondary">
+                              {ngo.parlimentConstituency || "N/A"}
+                            </div>
                           </td>
                           <td>{getStatusBadge(ngo.status)}</td>
                           <td>
@@ -200,7 +236,7 @@ const AdminDashboard = () => {
                                   </a>
                                 </OverlayTrigger>
                               )}
-                              
+
                               {ngo.idProof && (
                                 <OverlayTrigger
                                   placement="top"
@@ -216,7 +252,7 @@ const AdminDashboard = () => {
                                   </a>
                                 </OverlayTrigger>
                               )}
-                              
+
                               {ngo.selfiePhoto && (
                                 <OverlayTrigger
                                   placement="top"
@@ -232,7 +268,7 @@ const AdminDashboard = () => {
                                   </a>
                                 </OverlayTrigger>
                               )}
-                              
+
                               {ngo.ngoProfile && (
                                 <OverlayTrigger
                                   placement="top"
@@ -258,7 +294,9 @@ const AdminDashboard = () => {
                                   variant="success"
                                   size="sm"
                                   className="me-2 action-btn"
-                                  onClick={() => updateStatus(ngo._id, "Accepted")}
+                                  onClick={() =>
+                                    updateStatus(ngo._id, "Accepted")
+                                  }
                                 >
                                   <FaCheck className="me-1" /> Approve
                                 </Button>
@@ -266,7 +304,9 @@ const AdminDashboard = () => {
                                   variant="danger"
                                   size="sm"
                                   className="action-btn"
-                                  onClick={() => updateStatus(ngo._id, "Rejected")}
+                                  onClick={() =>
+                                    updateStatus(ngo._id, "Rejected")
+                                  }
                                 >
                                   <FaTimes className="me-1" /> Reject
                                 </Button>
@@ -281,35 +321,103 @@ const AdminDashboard = () => {
                             <Collapse in={expandedRows[ngo._id]}>
                               <div className="expanded-details">
                                 <div className="p-4">
-                                  <h5 className="mb-3">Additional Information</h5>
+                                  <h5 className="mb-3">
+                                    Additional Information
+                                  </h5>
                                   <div className="row">
                                     <div className="col-md-6">
                                       <div className="mb-3">
                                         <strong>Organization Details</strong>
-                                        <p className="mb-1">Name: {ngo.organizationName}</p>
-                                        <p className="mb-1">Type: {ngo.organizationType || 'N/A'}</p>
-                                        <p className="mb-1">Registration Number: {ngo.registrationNumber || 'N/A'}</p>
+                                        <p className="mb-1">
+                                          Name: {ngo.organizationName}
+                                        </p>
+                                        <p className="mb-1">
+                                          Type: {ngo.organizationType || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Registration Number:{" "}
+                                          {ngo.registrationNumber || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          webId: {ngo.webId || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          80G Number: {ngo.number80G || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          12A Number: {ngo.number12A || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          FCRA Number: {ngo.fcraNumber || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Full Name: {ngo.fullName || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Father's Name:{" "}
+                                          {ngo.fatherName || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Date of Birth: {ngo.dob || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Gender: {ngo.gender || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Marital Status:{" "}
+                                          {ngo.maritalStatus || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Religion: {ngo.religion || "N/A"}
+                                        </p>
+                                        <p className="mb-1">
+                                          Languages Known:{" "}
+                                          {ngo.languagesKnown || "N/A"}
+                                        </p>
                                       </div>
                                       <div className="mb-3">
                                         <strong>Contact Information</strong>
-                                        <p className="mb-1">Email: {ngo.email}</p>
-                                        <p className="mb-1">Phone: {ngo.contactNumber}</p>
-                                        <p className="mb-1">Alternative Phone: {ngo.alternateNumber || 'N/A'}</p>
+                                        <p className="mb-1">
+                                          Email: {ngo.email}
+                                        </p>
+                                        <p className="mb-1">
+                                          Phone: {ngo.contactNumber}
+                                        </p>
+                                        <p className="mb-1">
+                                          Alternative Phone:{" "}
+                                          {ngo.whatsappNumber || "N/A"}
+                                        </p>
                                       </div>
                                     </div>
                                     <div className="col-md-6">
                                       <div className="mb-3">
                                         <strong>Address Details</strong>
-                                        <p className="mb-1">State: {ngo.state || 'N/A'}</p>
-                                        <p className="mb-1">District: {ngo.district || 'N/A'}</p>
-                                        <p className="mb-1">Parliamentary Constituency: {ngo.parlimentConstituency || 'N/A'}</p>
-                                        <p className="mb-1">Assembly Constituency: {ngo.assemblyConstituency || 'N/A'}</p>
+                                        <p className="mb-1">
+                                          State: {ngo.state || "N/A"}
+                                        </p>
+                                        {/* <p className="mb-1">District: {ngo.district || 'N/A'}</p> */}
+                                        <p className="mb-1">
+                                          Parliamentary Constituency:{" "}
+                                          {ngo.parlimentConstituency || "N/A"}
+                                        </p>
+                                        {/* <p className="mb-1">Assembly Constituency: {ngo.assemblyConstituency || 'N/A'}</p> */}
                                       </div>
                                       <div className="mb-3">
                                         <strong>Additional Details</strong>
-                                        <p className="mb-1">Registration Date: {ngo.registrationDate || 'N/A'}</p>
-                                        <p className="mb-1">Status: {ngo.status}</p>
-                                        <p className="mb-1">Last Updated: {new Date(ngo.updatedAt).toLocaleDateString()}</p>
+                                        <p className="mb-1">
+                                          Registration Date:{" "}
+                                          {new Date().toLocaleDateString()}
+                                        </p>
+
+                                        <p className="mb-1">
+                                          Status: {ngo.status}
+                                        </p>
+                                        <p className="mb-1">
+                                          Last Updated:{" "}
+                                          {new Date(
+                                            ngo.updatedAt
+                                          ).toLocaleDateString()}
+                                        </p>
                                       </div>
                                     </div>
                                   </div>
